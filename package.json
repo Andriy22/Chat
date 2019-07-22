@@ -11,10 +11,12 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/vuetify": "0.5.5",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
-    "@nuxtjs/vuetify": "0.5.5",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "socket.io": "^2.2.0",
+    "vue-socket.io": "^3.0.7"
   },
   "devDependencies": {
     "stylus": "^0.54.5",
