@@ -8,7 +8,7 @@
       </v-btn>
       <v-toolbar-title>Room: {{user.room}}</v-toolbar-title>
     </v-toolbar>
-      <v-navigation-drawer app v-model="drawer">
+      <v-navigation-drawer mobile-break-point="650" app v-model="drawer">
       <v-list subheader>
         <v-subheader>Users in room</v-subheader>
         <v-list-tile v-for="u in users" :key="u.id" @click.prevent>
@@ -23,7 +23,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-content>
-      <div>
+      <div style="height: 100%">
         <nuxt/>
       </div>
     </v-content>

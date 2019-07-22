@@ -43,15 +43,35 @@ export default {
   }),
   methods: {
     ...mapMutations(["setUser"]),
+    // PRINT CALLBACK
+    PrintCB(data) {
+      console.warn('==============');
+      console.log('Data: ' + data);
+      console.warn('==============');
+    },
     submit() {
       if (this.$refs.form.validate()) {
         const user = {
           name: this.name,
           room: this.room
         };
+        
 
-        this.setUser(user);
-        this.$router.push("/chat");
+        // Відправка користувача на сервер
+        // Sending user to server  
+
+       this.$socket.emit('userJoin', user, data => {
+        this.PrintCB(data);
+        if (typeof data === 'string') {
+          console.error('ERROR', data);
+        } else {
+          // В стейт сетим користувача і перекідуєм на сторінку чата
+          // Set user and redirect to chat page
+          user.id = data.userId;
+          this.setUser(user);
+          this.$router.push("/chat");
+        }
+       }) 
       }
     }
   }
