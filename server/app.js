@@ -19,6 +19,9 @@ io.on('connection', sokcet => {
         if (!data.name || !data.room) {
             return callback("Invalid data!");
         }
+        if(data.name === 'System') {
+            return callback('System is system name');
+        }
         // Connect user to room
         // Підключаємо користувача в комнату
         sokcet.join(data.room);
@@ -31,10 +34,11 @@ io.on('connection', sokcet => {
         });
 
         callback({userId: sokcet.id})
+        io.to(data.room).emit('updateUsers', users.getByRoom(data.room))
         sokcet.emit('newMessage', newMsg('System',`Hello ${data.name}! You are connected!`) )
-        sokcet.emit('newMessage', newMsg('Admin',`Hello`) )        
+        // sokcet.emit('newMessage', newMsg('Admin',`Hello`) )        
         sokcet.broadcast.to(data.room).emit('newMessage', newMsg('System', `User ${data.name} connected!`));
-    })
+    });
 
     // Сервер створює повідомлення і відправляє на клієнт
     // Create message and callback to client!
@@ -48,6 +52,25 @@ io.on('connection', sokcet => {
       }
       callback();
      
+    });
+
+    sokcet.on('userLeft', (id, callback) => {
+
+        const user = users.remove(id);
+        if (user) {
+            io.to(user.room).emit('updateUsers', users.getByRoom(user.room))
+            io.to(user.room).emit('newMessage', newMsg('System','User ' + user.name + ' disconnected'));
+            return callback('done');
+        }
+        return callback('Not found');
+    });
+
+    sokcet.on('disconnect', () => {
+        const user = users.remove(sokcet.id);
+        if (user) {
+            io.to(user.room).emit('updateUsers', users.getByRoom(user.room))
+            io.to(user.room).emit('newMessage', newMsg('System','User' + user.name + ' disconnected'));
+        }
     })
 })
 

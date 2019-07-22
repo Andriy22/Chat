@@ -15,7 +15,9 @@ class Users {
         const user = this.getById(id);
 
         if (user) {
-            this.users = this.users.filter(user => user !==id);
+            this.users = this.users.filter(user => user.id !== id);
+            console.log('removeID: ', id);
+            console.log('Array users: ', this.users);
         }
         return user;
     }
